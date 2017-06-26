@@ -9,6 +9,7 @@ const SendMessageButton = ({ onClick }) => (
     label="send"
     icon={<SendIcon />}
     onTouchTap={onClick}
+    fullWidth
   />
 );
 

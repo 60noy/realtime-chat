@@ -2,15 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import User from '../User';
 
-const UserMessage = (user, message) => (
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '1%',
+    marginBottom: '1%',
+    marginLeft: '2%',
+  },
+};
+
+const UserMessage = ({ user, message }) => (
   // TODO: add user image icon on the right
-  <div>
+  <div style={styles.container}>
     <User
       name={user.name}
       img={user.img}
     />
     <div>
-      {message}
+      : {message}
     </div>
   </div>
 );

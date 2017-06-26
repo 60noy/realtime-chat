@@ -5,14 +5,14 @@ import SendMessageButton from '../SendMessageButton';
 
 const styles = {
   container: {
-    flex: 1,
+    display: 'flex',
     flexDirection: 'row',
   },
   textField: {
-    flex: 8,
+    flex: 10,
   },
   sendMessageButton: {
-    flex: 2,
+    flex: 1,
   },
 };
 
@@ -24,8 +24,8 @@ class SendMessageSection extends Component {
     };
   }
   // triggers on every input change in the text field. Changes the state
-  handleInputChange = (e, value) => {
-    this.setState({ value });
+  handleInputChange = (e, input) => {
+    this.setState({ input });
   }
   // triggers on send button and triggers onSendMessage function in props with the text in the state
   handleSendButtonClick = () => {
@@ -35,17 +35,25 @@ class SendMessageSection extends Component {
       this.props.onSendMessage(input);
     }
   }
+  // triggers send button function on enter key press
+  handleKeyPress = (e) => {
+    if (e.charCode === 13) {
+      e.preventDefault();
+      this.handleSendButtonClick();
+    }
+  }
 
   render() {
-    const { value } = this.state;
+    const { input } = this.state;
     return (
       <div style={styles.container}>
         <div style={styles.textField}>
           <TextField
             hintText="Type anything and press enter"
-            value={value}
+            value={input}
             fullWidth
             onChange={this.handleInputChange}
+            onKeyPress={this.handleKeyPress}
           />
         </div>
         <div style={styles.sendMessageButton}>

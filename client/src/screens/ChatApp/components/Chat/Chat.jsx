@@ -1,37 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Paper from 'material-ui/Paper';
+import Paper from 'material-ui/Paper';
 import SendMessageSection from '../SendMessageSection';
 import UserMessagesList from '../UserMessagesList';
 import UsersList from '../UsersList';
 
 const styles = {
   container: {
-    margin: '10%',
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: '10%',
+    marginRight: '10%',
   },
   messagesAndUsersList: {
-    flex: 1,
+    width: '100%',
+    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   messages: {
-    flex: 6,
+    width: '100%',
   },
   usersList: {
-    flex: 4,
+    width: '15%',
   },
 };
 
 const Chat = ({ onSendMessage, messages, users }) => (
-  // <Paper zDepth={4}>
   <div style={styles.container}>
-    <div style={styles.messagesAndUsersList} />
-    <div style={styles.messages}>
-      <UserMessagesList messages={messages} />
-    </div>
-    <div style={styles.usersList}>
-      <UsersList users={users} />
-    </div>
-    <SendMessageSection onSendMessage={onSendMessage} />
+    <Paper zDepth={3}>
+      <div style={styles.messagesAndUsersList} >
+        <div style={styles.messages}>
+          <UserMessagesList messages={messages} />
+        </div>
+        <div style={styles.usersList}>
+          <UsersList users={users} />
+        </div>
+      </div>
+      <SendMessageSection onSendMessage={onSendMessage} />
+    </Paper>
   </div>
 );
 

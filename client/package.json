@@ -5,6 +5,7 @@
   "dependencies": {
     "material-ui": "^0.18.4",
     "prop-types": "^15.5.10",
+    "randomcolor": "^0.5.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-tap-event-plugin": "^2.0.1",
