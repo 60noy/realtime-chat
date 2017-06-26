@@ -17,9 +17,12 @@ app.io = io;
 
 io.on('connection', (socket) => {
   console.log('a user has connected');
+  socket.on('new_message',(message) =>{
+    console.log('new message from '+ message.user.name + ': ' + message.message);
+  })
 });
 
-io.on('disconnection', (socket) => {
+io.on('disconnection', () => {
   console.log('a user has disconnected');
 });
 

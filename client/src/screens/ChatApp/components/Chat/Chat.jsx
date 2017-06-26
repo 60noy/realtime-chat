@@ -11,6 +11,7 @@ const styles = {
     flexDirection: 'column',
     marginLeft: '10%',
     marginRight: '10%',
+    height: '100%',
   },
   messagesAndUsersList: {
     width: '100%',

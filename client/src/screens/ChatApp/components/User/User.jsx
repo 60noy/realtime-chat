@@ -6,6 +6,7 @@ const styles = {
   container: {
     display: 'flex',
     alignItems: 'center',
+    fontWeight: 'bold',
   },
   name: {
     marginLeft: '10px',
