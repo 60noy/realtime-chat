@@ -15,12 +15,14 @@ var app = express();
 var io = socket_io();
 app.io = io;
 
-io.on('connection', (socket) => {
+io.on('connection', () => {
   console.log('a user has connected');
-  socket.on('new_message',(message) =>{
-    console.log('new message from '+ message.user.name + ': ' + message.message);
-  })
 });
+  io.on('new_message',(message) =>{
+    console.log('new message from '+ message.user.name + ': ' + message.message);
+  io.emit('new_message',message);
+  });
+
 
 io.on('disconnection', () => {
   console.log('a user has disconnected');

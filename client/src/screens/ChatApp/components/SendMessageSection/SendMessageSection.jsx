@@ -7,6 +7,8 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'row',
+    marginRight: '2%',
+    marginLeft: '2%',
   },
   textField: {
     flex: 10,
@@ -33,6 +35,7 @@ class SendMessageSection extends Component {
     // TODO: if stuck on loop - return the function
     if (input) {
       this.props.onSendMessage(input);
+      this.setState({ input: '' });
     }
   }
   // triggers send button function on enter key press
