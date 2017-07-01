@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
-var io = require('socket.io')(http, {'pingInterval': 1000, 'pingTimeout': 1000});
+var io = require('socket.io')(http, {'pingInterval': 3000, 'pingTimeout': 2000});
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -21,10 +21,11 @@ app.io = io;
 let usersCounter = 0;
 io.on('connection', (socket) => {
   usersCounter++;
+  const user = socket.user
   // emits to all whenever a new user joins to the room
   io.emit('user joined',usersCounter);
   console.log('a user has connected');
-  socket.on('new_message',(message) =>{
+  socket.on('new_message',({message}) =>{
     console.log(util.inspect(message,false,null));
     io.emit('new_message',message);
   });

@@ -27,12 +27,9 @@ const styles = {
   },
 };
 
-const Chat = ({ onSendMessage, messages, users, usersNum }) => (
+const Chat = ({ onSendMessage, messages, users }) => (
   <div style={styles.container}>
     <Paper zDepth={3}>
-      <div style={{ textAlign: 'center', color: 'grey' }}>
-        There are currently {usersNum} users
-      </div>
       <div style={styles.messagesAndUsersList} >
         <div style={styles.messages}>
           <UserMessagesList messages={messages} />
@@ -48,17 +45,28 @@ const Chat = ({ onSendMessage, messages, users, usersNum }) => (
 
 Chat.propTypes = {
   onSendMessage: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      img: PropTypes.string.isRequired,
-    }).isRequired,
-  })).isRequired,
+  messages: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      content: PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        user: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          img: PropTypes.string.isRequired,
+          color: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired,
+    })).isRequired,
+    PropTypes.arrayOf(PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      content: PropTypes.shape({
+        text: PropTypes.string.isRequired,
+      }).isRequired,
+    })).isRequired,
+  ]).isRequired,
   users: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     img: PropTypes.string.isRequired,
   })).isRequired,
-  usersNum: PropTypes.number.isRequired,
 };
 export default Chat;

@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { grey300 } from 'material-ui/styles/colors';
+import { grey500 } from 'material-ui/styles/colors';
 
 const styles = {
   container: {
     textAlign: 'center',
-    color: grey300,
-    fontSize: '1.1em',
-
+    color: grey500,
   },
 };
 const StatusMessage = ({ text }) => (

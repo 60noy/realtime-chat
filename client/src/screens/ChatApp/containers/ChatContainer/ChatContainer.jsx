@@ -17,23 +17,28 @@ export default class ChatContainer extends Component {
     this.state = {
       usersCounter: 0,
       messages: [
-        { user: {
-          hero: 'GENJI',
-          name: 'Genju',
-          img: `${process.env.PUBLIC_URL}/images/GENJI.jpg`,
-          color: genjiColor,
-
+        {
+          type: 'USER_MESSAGE',
+          content: {
+            user: {
+              hero: 'GENJI',
+              name: 'Genju',
+              img: `${process.env.PUBLIC_URL}/images/GENJI.jpg`,
+              color: genjiColor,
+            },
+            text: 'Using the kayo kure',
+          },
         },
-          text: 'Using the kayo kure',
-        },
-        { user: {
-          hero: 'TRACER',
-          name: 'Tracer',
-          img: `${process.env.PUBLIC_URL}/images/TRACER.jpg`,
-          color: tracerColor,
-
-        },
-          text: 'Lets try again',
+        { type: 'USER_MESSAGE',
+          content: {
+            user: {
+              hero: 'TRACER',
+              name: 'Tracer',
+              img: `${process.env.PUBLIC_URL}/images/TRACER.jpg`,
+              color: tracerColor,
+            },
+            text: 'Lets try again',
+          },
         },
       ],
       users: [{
@@ -41,13 +46,11 @@ export default class ChatContainer extends Component {
         name: 'Tracer',
         img: `${process.env.PUBLIC_URL}/images/TRACER.jpg`,
         color: tracerColor,
-
       }, {
         hero: 'GENJI',
         name: 'Genju',
         img: `${process.env.PUBLIC_URL}/images/GENJI.jpg`,
         color: genjiColor,
-
       }],
       user: {
         name: 'Seagull',
@@ -59,29 +62,27 @@ export default class ChatContainer extends Component {
     };
   }
   componentDidMount() {
-    // socket.on('connection', (connection) => {
-    // console.log('connection');
+    socket.emit('connection');
     const userID = this.state.user.id;
-    socket.on('new_message', ({ user, text }) => {
-      const { id } = user;
-      if (id !== userID) {
-        this.addMessageToState(user, text);
+    socket.on('new_message', (message) => {
+      const { type } = message;
+      // adds the message to the state if it is a status message
+      // or the sender is not the current user
+      if (type !== 'USER_MESSAGE' || message.content.user.id !== userID) {
+        this.addMessageToState(message);
       }
     });
-    socket.emit('connection');
-    socket.on('user left', (usersNum) => {
-      console.log('user has left');
-      this.setState({ usersCounter: usersNum });
-    });
-
+    // gets connection when a new user joins the chat
     socket.on('user joined', (usersNum) => {
       console.log('user has joined');
       this.setState({ usersCounter: usersNum });
+      this.addNewCurrentUsersMessage(usersNum);
+      // this.addUserToUsersList(user);
     });
-
+    // gets connection when a user leaves the chat
     socket.on('user left', (usersNum) => {
-      console.log('user has left');
       this.setState({ usersCounter: usersNum });
+      this.addNewCurrentUsersMessage(usersNum);
     });
 
     //
@@ -89,40 +90,62 @@ export default class ChatContainer extends Component {
     //   socket.emit('disconnect');
     // });
   }
-  disconnect = () => {
-    socket.emit('disconnect');
+  // adds the current users message
+  addNewCurrentUsersMessage = (usersNum) => {
+    // const userLeftMessage = {
+    //   type: 'STATUS_MESSAGE',
+    //   content: {
+    //     text: `${username} has left.`,
+    //   },
+    // };
+
+    const currentUsersMessage = {
+      type: 'STATUS_MESSAGE',
+      content: {
+        text: `There are currently ${usersNum} users.`,
+      },
+    };
+    const { messages } = this.state;
+    messages.push(currentUsersMessage);
+    this.setState({ messages });
   }
-  // componentWillUnmount() {
-  //   socket.emit('disconnect');
-  // }
-  // triggers after the current user presses send button
+  // adds the user to the users list
+  addUserToUsersList = (user) => {
+    const { users } = this.state;
+    users.push(user);
+    this.setState({ users });
+  }
   handleAddChatMessage = (text) => {
     console.log(`user sent a message : ${text}`);
     const { user } = this.state;
-    this.addMessageToState(user, text);
-    socket.emit('new_message', { user, text });
+    const message = {
+      type: 'USER_MESSAGE',
+      content: {
+        user,
+        text,
+      } };
+    this.addMessageToState(message);
+    socket.emit('new_message', { message });
   }
   // triggers on new message emit and adds the message to the state
-  addMessageToState = (user, text) => {
+  addMessageToState = (message) => {
     const { messages } = this.state;
-    const { name, hero, color } = user;
-    const newUser = { name, hero, color, img: `${process.env.PUBLIC_URL}/images/${hero}.jpg` };
-    const newMessage = { user: newUser, text };
-    messages.push(newMessage);
-    console.log(newMessage);
+    // const { name, hero, color } = user;
+    // const newUser = { name, hero, color, img: `${process.env.PUBLIC_URL}/images/${hero}.jpg` };
+    // const newMessage = { user: newUser, text };
+    messages.push(message);
+    console.log(message);
     this.setState({ messages });
   }
   render() {
-    const { messages, users, usersCounter } = this.state;
+    const { messages, users } = this.state;
     return (
       <div>
         <Chat
           onSendMessage={this.handleAddChatMessage}
           messages={messages}
           users={users}
-          usersNum={usersCounter}
         />
-        <button onClick={this.disconnect} >disconnect </button>
       </div>
     );
   }
