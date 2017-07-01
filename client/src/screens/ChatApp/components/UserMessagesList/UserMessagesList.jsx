@@ -22,6 +22,7 @@ UserMessagesList.propTypes = {
     user: PropTypes.shape({
       name: PropTypes.string.isRequired,
       img: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
     }).isRequired,
   })).isRequired,
 };

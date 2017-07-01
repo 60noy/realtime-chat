@@ -27,9 +27,12 @@ const styles = {
   },
 };
 
-const Chat = ({ onSendMessage, messages, users }) => (
+const Chat = ({ onSendMessage, messages, users, usersNum }) => (
   <div style={styles.container}>
     <Paper zDepth={3}>
+      <div style={{ textAlign: 'center', color: 'grey' }}>
+        There are currently {usersNum} users
+      </div>
       <div style={styles.messagesAndUsersList} >
         <div style={styles.messages}>
           <UserMessagesList messages={messages} />
@@ -56,5 +59,6 @@ Chat.propTypes = {
     name: PropTypes.string.isRequired,
     img: PropTypes.string.isRequired,
   })).isRequired,
+  usersNum: PropTypes.number.isRequired,
 };
 export default Chat;

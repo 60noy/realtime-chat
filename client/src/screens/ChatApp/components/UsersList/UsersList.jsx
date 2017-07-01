@@ -34,6 +34,7 @@ const UsersList = ({ users }) => (
         <User
           name={user.name}
           img={user.img}
+          color={user.color}
         />
       </div>),
     )}
@@ -44,6 +45,7 @@ UsersList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     img: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
   })).isRequired,
 };
 export default UsersList;

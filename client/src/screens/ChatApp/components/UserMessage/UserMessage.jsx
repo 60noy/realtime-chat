@@ -14,11 +14,11 @@ const styles = {
 };
 
 const UserMessage = ({ user, message }) => (
-  // TODO: add user image icon on the right
   <div style={styles.container}>
     <User
       name={user.name}
       img={user.img}
+      color={user.color}
     />
     <div>
       : {message}
@@ -31,6 +31,7 @@ UserMessage.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
     img: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
   }).isRequired,
 };
 export default UserMessage;
