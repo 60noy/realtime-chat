@@ -8,6 +8,7 @@ var socket_io = require('socket.io');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+const util = require('util')
 
 var app = express();
 
@@ -15,17 +16,18 @@ var app = express();
 var io = socket_io();
 app.io = io;
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
   console.log('a user has connected');
-});
-  io.on('new_message',(message) =>{
-    console.log('new message from '+ message.user.name + ': ' + message.message);
-  io.emit('new_message',message);
+  socket.on('new_message',(message) =>{
+    console.log(util.inspect(message,false,null));
+    io.emit('new_message',message);
   });
+});
 
 
 io.on('disconnection', () => {
   console.log('a user has disconnected');
+  io.emit('disconnection');
 });
 
 // view engine setup

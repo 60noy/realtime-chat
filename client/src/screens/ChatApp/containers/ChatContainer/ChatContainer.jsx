@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
+import shortid from 'shortid';
+import randomcolor from 'randomcolor';
 import Chat from '../../components/Chat';
-// import api from '../../../../utils/constants';
+
 const socket = io('http://localhost:3000');
 
 export default class ChatContainer extends Component {
@@ -39,6 +41,8 @@ export default class ChatContainer extends Component {
         name: 'Seagull',
         hero: 'GENJI',
         img: `${process.env.PUBLIC_URL}/images/GENJI.jpg`,
+        id: shortid.generate(),
+        color: randomcolor(),
       },
 
     };
@@ -46,9 +50,13 @@ export default class ChatContainer extends Component {
   componentDidMount() {
     // socket.on('connection', (connection) => {
     // console.log('connection');
-    socket.on('new_message', ({ name, hero }, text) => {
-      console.log(`new message on${name}`);
-      this.addMessageToState(name, hero, text);
+    const userID = this.state.user.id;
+    socket.on('new_message', ({ name, hero, text, id }) => {
+      if (id !== userID) {
+        console.log(`ID:${userID}`);
+        console.log(`new message on ${JSON.stringify(userID)}`);
+        this.addMessageToState(name, hero, text);
+      }
     });
 
     // });
@@ -58,12 +66,12 @@ export default class ChatContainer extends Component {
     });
   }
   // triggers on current user send button press
-  handleAddChatMessage = (message) => {
-    console.log(`user sent a message : ${message}`);
+  handleAddChatMessage = (text) => {
+    console.log(`user sent a message : ${text}`);
     const { user } = this.state;
-    const { name, hero } = user;
-    socket.emit('new_message', { name, hero, message });
-    this.addMessageToState(name, hero, message);
+    const { name, hero, id } = user;
+    socket.emit('new_message', { name, hero, text, id });
+    this.addMessageToState(name, hero, text);
 
     // TODO: add SOCKETIO emitter (io.on())
   }
